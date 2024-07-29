@@ -43,9 +43,11 @@
             <?php 
             foreach($products as $product){
             ?>
-             <tr>
+             <tr class=" align-middle text-center">
                 <td><?php echo $product['product_id'] ?></td>
-                <td>product.jpg</td>
+                <td>
+                    <img style="width: 100px; height: 100px;" src="../public/images/<?php echo $product['product_image'] ?>" alt="">
+                </td>
                 <td><?php echo $product['product_title'] ?></td>
                 <td>$<?php echo $product['product_price'] ?></td>
                 <td><?php echo $product['product_qty'] ?>in stock</td>
@@ -57,6 +59,7 @@
             <?php
             }
 
+            //Router 
             if(isset($_POST['yes_delete'])){
                 $id = $_POST['product_id'];
                 $obj->delete($id);

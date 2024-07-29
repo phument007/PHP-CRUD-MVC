@@ -23,11 +23,37 @@
     }
 
     public function delete($id){
+       /* 
+         Delete : 2 step 
+         1. remove image from folder 
+         2. delete record from database
+       */
+
        $product = new Proudcts();
        $product->setId($id);
+
+       // Step 1 : remove image from folder
+       $row = $product->selectById($id);
+       /*
+         $row = [
+          'product_id' => 1,
+          'product_title' => fsdfasf,
+          'product_price' => 100,
+          'product_qty' => 1,
+          'product_image' => image.jpg,
+         ]
+       */
+       $image = $row['product_image'];  //store image name from db
+       $imageDir = "../public/images/$image";
+       if(file_exists($imageDir)){
+           unlink($imageDir);  
+       }
+
+       // Step 2 : delete record from database
        $product->destroy();
 
        return redirect('main.php');
+
     }
 
     public function edit($id){

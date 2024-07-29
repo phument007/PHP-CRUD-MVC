@@ -24,6 +24,14 @@ class Proudcts extends Database {
 
         $row = mysqli_fetch_assoc($result);
 
+          /*
+         $row =  array(
+          'product_id' => 1,
+          'product_title' => fsdfasf,
+          'product_price' => 100,
+          'product_qty' => 1,
+          'product_image' => image.jpg,
+          ) */
 
         return $row;  //return to controller
 
