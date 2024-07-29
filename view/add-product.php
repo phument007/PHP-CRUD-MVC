@@ -2,7 +2,7 @@
 
 <div class="container">
    
-    <form method="POST" class=" shadow p-5">
+    <form method="POST" enctype="multipart/form-data" class=" shadow p-5">
         <?php 
         
          if(isset($_SESSION['status']) == 'error'){
@@ -50,13 +50,27 @@
           $price = $_POST['price'];
           $qty = $_POST['qty'];
 
+
+          /*step uload :  
+             1.get image name
+             2.upload image to folder 
+             3.store image name in database
+          */
+
+          #step 1 (get image name)
+          $file_name = $_FILES['image']['name'];
+          $file_tmp  = $_FILES['image']['tmp_name'];  //get image template
+          #step 2 (upload image to folder)
+          $imageDir = "../public/images/$file_name";
+          move_uploaded_file($file_tmp,$imageDir);
+
           if(empty($title) || empty($price) || empty($qty)){
             $_SESSION['status'] = 'error';
             header("location: add-product.php");
           }else{
             $_SESSION['status'] = 'success';
             $_SESSION['message'] = "Added Product Successfully.";
-            $obj->store($title,$price,$qty);
+            $obj->store($title,$price,$qty,$file_name);
           }
 
           

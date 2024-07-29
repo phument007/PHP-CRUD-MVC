@@ -13,8 +13,8 @@ class Proudcts extends Database {
     }
 
     public function save(){
-        $sql ="INSERT INTO `products`( `product_title`, `product_price`, `product_qty`) 
-        VALUES ('{$this->title}','{$this->price}','{$this->qty}')";
+        $sql ="INSERT INTO `products`( `product_title`, `product_price`, `product_qty`,`product_image`) 
+        VALUES ('{$this->title}','{$this->price}','{$this->qty}','{$this->image}')";
         mysqli_query($this->conn,$sql);
     }
 
@@ -44,8 +44,6 @@ class Proudcts extends Database {
         /*
          "name" => "kkk"
         */
-
-    
         $data = [];
         while($row  = mysqli_fetch_assoc($result)){
             $data[] = [

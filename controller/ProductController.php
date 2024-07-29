@@ -4,11 +4,12 @@
   include "../handle/Message.php";
   class ProudctsController {
 
-    public function store($title,$price,$qty){
+    public function store($title,$price,$qty,$image){
         $product = new Proudcts();
         $product->title = $title;
         $product->price = $price;
         $product->qty = $qty;
+        $product->image = $image;  //step 3 (store image name in db);
         $product->save();
         return redirect("main.php");
     }
