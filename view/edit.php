@@ -8,7 +8,7 @@
 <?php include_once "../controller/ProductController.php"; ?>
 <div class="container">
    
-    <form method="POST" class=" shadow p-5">
+    <form enctype="multipart/form-data" method="POST" class=" shadow p-5">
         <?php 
          if(isset($_SESSION['status']) == 'error'){
         ?>
@@ -26,6 +26,10 @@
          if(isset($_GET['id'])){
             $id = $_GET['id'];
             $product = $obj->edit($id);
+
+            echo "<pre>";
+            print_r($product);
+            echo "</pre>";
          }
 
 
@@ -51,6 +55,11 @@
         <div class="form-group">
             <label for="">Product image</label>
             <input type="file" name="image" class=" form-control shadow-none" id="">
+            <img style=" width:120px; height:140px;" src="../public/images/<?php echo $product['product_image'] ?>" alt="">
+
+
+            <!-- input for  old image -->
+             <input type="text" name="old_image" value="<?php echo $product['product_image'] ?>">
         </div>
         <div class="form-button mt-3">
             <button name="update" type="submit" class="btn btn-success btn-block rounded-0">Update</button>
@@ -64,13 +73,39 @@
           $price = $_POST['price'];
           $qty = $_POST['qty'];
 
+          /*
+            1.update with new image
+            2.update with old image
+             
+          */
+
+          $image = '';
+
+          #step 1 (check if new image is selected)
+          if(!empty($_FILES['image']['name'])){
+            #step 1 (get image name)
+            $file_name = $_FILES['image']['name'];
+            $file_tmp  = $_FILES['image']['tmp_name'];  //get image template
+            #step 2 (upload image to folder)
+            $imageDir = "../public/images/$file_name";
+            move_uploaded_file($file_tmp,$imageDir);
+
+            //Assing new image to table in db
+            $image = $file_name;
+          }else{
+            #step 2 (update with old image)
+            $image = $_POST['old_image'];
+          }
+          
+          
+
           if(empty($id) || empty($title) || empty($price) || empty($qty)){
             $_SESSION['status'] = 'error';
             header("location:edit.php?id=$id");
           }else{
             $_SESSION['status'] = 'success';
             $_SESSION['message'] = "Updated Product successfully.";
-            $obj->update($id, $title, $price, $qty);
+            $obj->update($id, $title, $price, $qty,$image);
           }
 
       }

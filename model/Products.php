@@ -21,7 +21,6 @@ class Proudcts extends Database {
     public function selectById($id){
         $sql = "SELECT * FROM `products` WHERE `product_id` = $id";
         $result = mysqli_query($this->conn,$sql);
-
         $row = mysqli_fetch_assoc($result);
 
           /*
@@ -32,14 +31,14 @@ class Proudcts extends Database {
           'product_qty' => 1,
           'product_image' => image.jpg,
           ) */
-
         return $row;  //return to controller
 
     }
 
     public function update(){
-        $sql = "UPDATE `products` SET 
-        `product_title`='{$this->title}',`product_price`='{$this->price}',`product_qty`='{$this->qty}' 
+        $sql = "UPDATE `products` 
+        SET `product_title`='{$this->title}',`product_price`='{$this->price}',`product_qty`='{$this->qty}',
+        `product_image`='{$this->image}' 
         WHERE `product_id` = {$this->id}";
         mysqli_query($this->conn,$sql);
     }

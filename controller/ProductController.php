@@ -64,11 +64,35 @@
 
     }
 
-    public function update($id,$title,$price,$qty){
+    public function update($id,$title,$price,$qty,$image){
       $product = new Proudcts();
       $product->title = $title;
       $product->price = $price;
       $product->qty = $qty;
+      $product->image = $image;
+
+
+      //Apply sql for compere image 
+      $row =  $product->selectById($id);
+
+      /*
+         $row = [
+          'product_id' => 1,
+          'product_title' => fsdfasf,
+          'product_price' => 100,
+          'product_qty' => 1,
+          'product_image' => image.jpg,
+         ]
+       */
+
+       // Check if image name is changed
+       $image = $row['product_image'];
+       $imageDir = "../public/images/$image";
+
+       if(file_exists($imageDir)){
+         unlink($imageDir);
+       }
+
       $product->setId($id);
       $product->update();
       return redirect("main.php");
