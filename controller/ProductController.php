@@ -14,11 +14,19 @@
         return redirect("main.php");
     }
 
-    public function index($search){
+    public function index($search,$page){
         // is param "search" from view 
         $products = new Proudcts();
+        $products->pagination($page);
         $allData =  $products->all($search);
 
+        /*$allData = [
+                        'record' => 5,
+                        'data' => [
+                            .....
+                        ]
+                     ]
+        */
         return $allData;  // Return data to view 
     }
 
@@ -86,12 +94,14 @@
        */
 
        // Check if image name is changed
-       $image = $row['product_image'];
-       $imageDir = "../public/images/$image";
-
-       if(file_exists($imageDir)){
-         unlink($imageDir);
+       $image_db = $row['product_image'];
+       $imageDir = "../public/images/$image_db";
+       if($image_db != $image ){
+          if(file_exists($imageDir)){
+              unlink($imageDir);
+          }
        }
+       
 
       $product->setId($id);
       $product->update();

@@ -16,7 +16,13 @@
 
         <?php 
            $obj = new ProudctsController();
-           $products = $obj->index("");
+
+           if(isset($_GET['page']) >= 1){
+                $page = $_GET['page'];
+                $products = $obj->index("",$page)['data'];
+            }else{
+                $products = $obj->index("",1)['data'];
+            }
         ?>
         <?php ModelDelete()  ?>
         <div class=" d-flex justify-content-between align-items-center "> 
@@ -27,7 +33,8 @@
           <?php
              if(isset($_GET['search'])){
                 $search = $_GET['search'];
-                $products = $obj->index($search);
+                 
+                $products = $obj->index($search,1);
              }
           ?>
         </div>
@@ -41,6 +48,7 @@
                 <th class=" text-center">Action</th>
             </tr>
             <?php 
+            $i = 1;
             foreach($products as $product){
             ?>
              <tr class=" align-middle text-center">
@@ -72,6 +80,44 @@
 
 
         </table>
+        <?php
+            $allData = $obj->index("",1)['record'];
+
+            echo $allData;  // 7 product = 3 page 
+
+            // Pagination
+            $totalPages = ceil($allData / 3);  // 2.03 => 3
+
+
+
+        ?>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <li class="page-item <?php echo ($page == 1) ? 'd-none' : '' ?>">
+                    <a class="page-link" href="main.php?page=<?php  echo $page - 1 ?>" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                <?php
+                for($i =1;$i<=$totalPages;$i++){
+                    ?>
+                    <li class="page-item <?php echo ($page == $i) ? 'active' : '' ?>"><a class="page-link" href="main.php?page=<?php echo $i ?>"><?php echo $i ?></a></li>
+                    <?php
+                   }
+                 ?>
+                
+
+                <li class="page-item <?php echo ($page == $totalPages) ? 'd-none' : '' ?>">
+                    <a class="page-link" href="main.php?page=<?php  echo $page + 1 ?>" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+
+            <?php 
+              
+            ?>
+        </nav>
     </div>
 
 <?php include "components/footer.php"; ?>

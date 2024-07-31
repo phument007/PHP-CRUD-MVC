@@ -3,10 +3,15 @@ include "../database/Database.php";
 //POJO = Plan Old java object
 class Proudcts extends Database {
     private $id;
+    private $page;
     public $title;
     public $qty;
     public $price;
     public $image;
+
+    public function pagination($page){
+        $this->page = $page;
+    }
 
     public function setId($id){
         $this->id = $id;
@@ -44,7 +49,11 @@ class Proudcts extends Database {
     }
 
     public function all($search){
-        $sql = "SELECT * FROM `products` WHERE `product_title` LIKE '%$search%' ";
+
+        $offset = ($this->page - 1) * 3;
+
+
+        $sql = "SELECT * FROM `products`  WHERE `product_title` LIKE '%$search%' LIMIT 3 OFFSET $offset ";
         $result = mysqli_query($this->conn,$sql);
 
         //covert to associative array 
@@ -77,17 +86,27 @@ class Proudcts extends Database {
         */
 
 
-        return $data;  //Return data to Controller 
+        //Count record 
+
+        $sql_count = "SELECT * FROM `products`";
+        $result_count = mysqli_query($this->conn,$sql_count);
+        $num = mysqli_num_rows($result_count);
+
+        return $record = [
+            'record' => $num,
+            'data'  => $data
+        ]; //Return data to Controller 
 
 
     }
+
+    
 
     public function destroy(){
         $sql = "DELETE FROM `products` WHERE `product_id` = {$this->id} ";
         mysqli_query($this->conn,$sql);
 
     }
-
 
 
 
