@@ -88,7 +88,7 @@ class Proudcts extends Database {
 
         //Count record 
 
-        $sql_count = "SELECT * FROM `products`";
+        $sql_count = "SELECT * FROM `products` WHERE `product_title` LIKE '%$search%' ";
         $result_count = mysqli_query($this->conn,$sql_count);
         $num = mysqli_num_rows($result_count);
 

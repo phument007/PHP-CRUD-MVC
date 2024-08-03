@@ -33,8 +33,7 @@
           <?php
              if(isset($_GET['search'])){
                 $search = $_GET['search'];
-                 
-                $products = $obj->index($search,1);
+                $products = $obj->index($search,1)['data'];
              }
           ?>
         </div>
@@ -81,15 +80,12 @@
 
         </table>
         <?php
-            $allData = $obj->index("",1)['record'];
-
-            echo $allData;  // 7 product = 3 page 
-
-            // Pagination
+            $search = "";
+            if(isset($_GET['search'])){
+                $search = $_GET['search'];
+            }
+            $allData = $obj->index($search,1)['record'];
             $totalPages = ceil($allData / 3);  // 2.03 => 3
-
-
-
         ?>
         <nav aria-label="Page navigation example">
             <ul class="pagination">
